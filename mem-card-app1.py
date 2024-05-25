@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
     QGroupBox, QRadioButton, QPushButton, QLabel)
 
 from random import shuffle
-
+from random import randint
 
 class Question():
     def __init__(self, question, right_answer, wrong_answer1, wrong_answer2, wrong_answer3):
@@ -133,15 +133,18 @@ def show_correct(respone):
 def check_answer():
     if answer[0].isChecked():
         show_correct('Corrected!')
+        window.score += 1
     else:
         if answer[1].isChecked() or answer[2].isChecked() or answer[3].isChecked():
             show_correct('Incorrected!')
 
 def next_question(): 
-    window.cur_question = window.cur_question + 1 
-    if window.cur_question >= len(questions_list):
-        window.cur_question = 0 
-    q = questions_list[window.cur_question]
+    window.total += 1
+    print('Statistics\n-Total questions: ', window.total, '\n-Right answers: ', window.score)
+
+    current_question = randint(0, len(questions_list) - 1)
+
+    q = questions_list[current_question]
     ask(q) 
 
 def click_OK():
@@ -154,14 +157,12 @@ window = QWidget()
 window.setLayout(whole_layout)
 window.setWindowTitle('Memory Card')
 
-# Make the current question from the list a property of the “window” object. That way, we can easily change its functions:
-window.cur_question = -1    # ideally, variables like this one should be properties 
-                            # we’d have to write a class whose instances have these properties,
-                            # but Python allows us to create a property for a single instance 
 
-
-# check that the answer panel appears when the button is pressed
 btn_OK.clicked.connect(click_OK)
+
+window.score = 0
+window.total = 0
+
 next_question()
 
 window.resize(400, 300)
