@@ -140,7 +140,10 @@ def check_answer():
 
 def next_question(): 
     window.total += 1
+    # window.rating = (window.total / window.score) * 100
+
     print('Statistics\n-Total questions: ', window.total, '\n-Right answers: ', window.score)
+    print('\n-Rating: ', window.rating)
 
     current_question = randint(0, len(questions_list) - 1)
 
@@ -161,7 +164,8 @@ window.setWindowTitle('Memory Card')
 btn_OK.clicked.connect(click_OK)
 
 window.score = 0
-window.total = 0
+window.total = -1 
+window.rating = 0
 
 next_question()
 
