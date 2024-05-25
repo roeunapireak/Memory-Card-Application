@@ -133,17 +133,21 @@ def show_correct(respone):
 def check_answer():
     if answer[0].isChecked():
         show_correct('Corrected!')
-        window.score += 1
+        window.number_right_answer += 1
     else:
         if answer[1].isChecked() or answer[2].isChecked() or answer[3].isChecked():
             show_correct('Incorrected!')
 
 def next_question(): 
-    window.total += 1
-    # window.rating = (window.total / window.score) * 100
-
-    print('Statistics\n-Total questions: ', window.total, '\n-Right answers: ', window.score)
-    print('\n-Rating: ', window.rating)
+    window.number_question += 1
+    window.rating = 0
+    if window.number_right_answer == 0 or window.number_question == 0:
+        print('Statistics\n-Total questions: ', window.number_question, '\n-Right answers: ', window.number_right_answer)
+    else:
+        if window.number_right_answer != 0 or window.number_question != 0:
+            window.rating = (window.number_right_answer / window.number_question) * 100
+            print('Statistics\n-Total questions: ', window.number_question, '\n-Right answers: ', window.number_right_answer)
+            print('\n-Rating: ', str(window.rating)+'%')
 
     current_question = randint(0, len(questions_list) - 1)
 
@@ -163,9 +167,9 @@ window.setWindowTitle('Memory Card')
 
 btn_OK.clicked.connect(click_OK)
 
-window.score = 0
-window.total = -1 
-window.rating = 0
+window.number_right_answer = 0 
+window.number_question = -1 
+window.rating = None
 
 next_question()
 
