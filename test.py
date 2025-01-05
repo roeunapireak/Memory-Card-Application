@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, 
                              QHBoxLayout, QLabel, QPushButton,
                              QGroupBox, QRadioButton, QButtonGroup)
-import datetime
+# import datetime
 
 from random import shuffle
 
@@ -109,18 +109,18 @@ def show_answer():
     answer_group_box.show()
     answer_bottun.setText('Next question')
 
-    timestamp_ = datetime.datetime.now()
-    # timestamp_ = timestamp_.timestamp()
-    print(timestamp_, 'clicked answer.')
+    # timestamp_ = datetime.datetime.now()
+    # # timestamp_ = timestamp_.timestamp()
+    # print(timestamp_, 'clicked answer.')
 
 def show_question():
     answer_group_box.hide()
     quiz_group_box.show()
     answer_bottun.setText('Answer')
 
-    timestamp_ = datetime.datetime.now()
-    # timestamp_ = timestamp_.timestamp()
-    print(timestamp_, 'clicked question.')
+    # timestamp_ = datetime.datetime.now()
+    # # timestamp_ = timestamp_.timestamp()
+    # print(timestamp_, 'clicked question.')
 
     # unselected answer option
     button_group.setExclusive(False)
@@ -133,7 +133,7 @@ def show_question():
 
 def is_check():
     if 'Answer' == answer_bottun.text():
-        show_answer()
+        is_correct()
     else:
         next_question()
 
@@ -155,20 +155,35 @@ def show_correct(respose):
     answer_result.setText(respose)
     show_answer()
 
-def is_correct():
+def is_correct():   
     if answer_options[0].isChecked():
         show_correct(respose='Corrected!')
+        window.score += 1
     else:
         if answer_options[1].isChecked() or answer_options[2].isChecked() or answer_options[3].isChecked():
             show_correct(respose='Incorrected!')
 
 def next_question():
     window.current_quiz += 1
+    window.quiz_total += 1
     if window.current_quiz >= len(question_list):
         window.current_quiz = 0
     instance_ = question_list[window.current_quiz]
 
     ask(instance_)
+
+    if window.quiz_total == 0 or window.score == 0:
+        print('\nSTATISTIC Collection:')
+        print('     - Total question:', window.quiz_total)
+        print('     - Correct answer:', window.score)
+        print('     - Rating:', None)   
+    if window.quiz_total != 0 or window.score != 0:
+        print('\nSTATISTIC Collection:')
+        print('     - Total question:',window.quiz_total)
+        print('     - Correct answer:', window.score)
+        print('     - Rating:', (window.score / window.quiz_total) * 100) 
+
+    
 
 # ask(quiz='which is your school?', 
 #     right_answer='AlgoPP', 
@@ -179,6 +194,8 @@ def next_question():
 
 window = QWidget()
 window.current_quiz = 0
+window.quiz_total = -1
+window.score = 0
 window.setWindowTitle('Memory Card Application')
 window.resize(400, 300)
 
